@@ -1,6 +1,5 @@
 const typeDefs = `
-type User {
-}
+
 
 type Query {
 }
