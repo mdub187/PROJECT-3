@@ -10,8 +10,10 @@ export interface CategoryDocument extends Document {
 const categorySchema = new Schema<CategoryDocument>({
   type: {
     type: String,
-    required: true,
-    unique: true,
+    // index: true,
+    // sparse: true,
+    // required: true,
+    // unique: true,
   },
   description: {
     type: String,
