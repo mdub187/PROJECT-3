@@ -40,5 +40,4 @@ createUser(username: String!, email: String!, password: String!): Auth
 login(email: String!, password: String!): Auth
 }
 `;
-
 export default typeDefs;
