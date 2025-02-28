@@ -15,16 +15,16 @@ export interface ResourceDocument extends Document {
 const resourceSchema = new Schema<ResourceDocument>({
   title: {
     type: String,
-    required: true,
+    // required: true,
   },
   description: {
     type: String,
-    required: true,
+    // required: true,
   },
   url: {
     type: String,
   },
-  category: [categorySchema],
+  category: categorySchema,
 });
 
 export default resourceSchema;

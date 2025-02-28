@@ -3,15 +3,15 @@ import categorySchema from "./Category.js";
 const resourceSchema = new Schema({
     title: {
         type: String,
-        required: true,
+        // required: true,
     },
     description: {
         type: String,
-        required: true,
+        // required: true,
     },
     url: {
         type: String,
     },
-    category: [categorySchema],
+    category: categorySchema,
 });
 export default resourceSchema;

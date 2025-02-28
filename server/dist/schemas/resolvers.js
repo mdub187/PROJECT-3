@@ -16,7 +16,6 @@ const resolvers = {
     },
     Mutation: {
         createUser: async (_parent, args, _context) => {
-            //args is for req.body & req.params when in a resolver
             const user = await User.create(args);
             if (!user) {
                 return null;
