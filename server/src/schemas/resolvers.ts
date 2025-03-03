@@ -35,7 +35,6 @@ const resolvers = {
         throw new AuthenticationError("Authentication Error");
       }
     },
-    // getResource: {},
     getResource: async (_parent: any, { _id }: any, context: any) => {
       if (!context.user) {
         throw new AuthenticationError("You need to be logged in!");
@@ -51,6 +50,11 @@ const resolvers = {
         throw new Error("Error fetching resource");
       }
     },
+    getAllResources: async (_parent: any, _args: any) => {
+      const getResources = await Resource.find();
+      return getResources;
+    },
+    //getResourceByCategory()
   },
   Mutation: {
     createUser: async (_parent: any, args: any, _context: any) => {
@@ -171,6 +175,29 @@ const resolvers = {
     },
 
     // updateResource: {},
+    saveResource: async (_parent: any, args: any, context: any) => {
+      try {
+        const updatedUser = await User.findByIdAndUpdate(
+          { _id: context.user._id },
+          { $addToSet: { savedResource: args.resourceId } },
+          { new: true, runValidators: true }
+        );
+        return updatedUser;
+      } catch (err) {
+        return null;
+      }
+    },
+    removeResource: async (_parent: any, args: any, context: any) => {
+      const updatedUser = await User.findByIdAndUpdate(
+        { _id: context.user._id },
+        { $pull: { savedResource: { resourceId: args.resourceId } } },
+        { new: true }
+      );
+      if (!updatedUser) {
+        return null;
+      }
+      return updatedUser;
+    },
   },
 };
 

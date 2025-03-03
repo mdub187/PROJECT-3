@@ -3,17 +3,18 @@ type User {
   _id: ID!
   username: String!
   email: String!
+  savedResource: [Resource]
 }
 
 type Resource {
-  _id: ID!
+  resourceId: ID!
   title: String!
   description: String!
   url: String
 }
 
 type Category {
-  _id: ID!
+  categoryId: ID!
   language: String!
   description: String
 }
@@ -29,6 +30,7 @@ type Query {
   getUserByUsername(username: String!): User
 
   getResource(_id: ID!): Resource
+  getAllResources: Resource
 }
 
 type Mutation {
@@ -39,6 +41,8 @@ type Mutation {
 
   deleteResource(_id: ID!): Resource
   createResource(title: String!, description: String!, url: String): Resource
+  saveResource(resourceId: String!, title: String!, description: String!, url: String): User
+  removeResource(resourceId: String!): User
   
 }
 `;
