@@ -61,17 +61,17 @@ const SignupForm = () => {
           <p className="text-red-500 text-sm mb-4 text-center">{error}</p>
         )}
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Email
-            </label>
-            <input
-              type="email"
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
+        <div>
+          <label className="block text-sm font-medium text-gray-700">
+            Email
+          </label>
+          <input
+            type="email"
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
           <button
             type="submit"
             className="w-full bg-blue-500 text-white p-3 rounded-lg hover:bg-blue-600 transition font-semibold"
@@ -79,7 +79,7 @@ const SignupForm = () => {
           >
             {loading ? "Creating account..." : "Sign Up"}
           </button>
-        </form>
+        </div>
       </div>
     </div>
   );

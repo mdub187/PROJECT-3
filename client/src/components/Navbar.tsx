@@ -1,9 +1,9 @@
-
 import { Link } from "react-router-dom";
-import { useAuth } from "../utils/Auth";
+import Auth from "../utils/Auth";
+import { useState } from "react";
 
 const Navbar = () => {
-  const { isAuthenticated, logout } = useAuth();
+  const [isAuthenticated] = useState(() => Auth.loggedIn());
 
   return (
     <nav className="bg-gray-800 p-4 text-white flex justify-between items-center">
@@ -26,7 +26,10 @@ const Navbar = () => {
             <Link to="/home" className="mr-4 text-white hover:underline">
               Home
             </Link>
-            <button onClick={logout} className="bg-red-500 px-3 py-1 rounded">
+            <button
+              onClick={() => Auth.logout()}
+              className="bg-red-500 px-3 py-1 rounded"
+            >
               Logout
             </button>
           </>

@@ -66,6 +66,35 @@ const resolvers = {
         },
         updateUser: async (_parent, args, context) => {
             if (context.user) {
+<<<<<<< HEAD
+                // return User.findByIdAndUpdate(
+                //     {
+                //       _id: context.user._id,
+                //     },
+                //     args,
+                //     {
+                //       new: true,
+                //     }
+                //   );
+                const updatedUser = await User.findByIdAndUpdate(context.user._id, {
+                    $set: {
+                        //   ...args,
+                        username: args.username || context.user.username,
+                        email: args.email || context.user.email,
+                        password: args.password || context.user.password,
+                    },
+                }, {
+                    new: true,
+                    runValidators: true,
+                });
+                // const updatedUser = await User.findOneAndUpdate(
+                //     { _id: context.user._id },
+                //     { $set: { ...args } },
+                //     { returnDocument: "after", runValidators: true }
+                //   );
+                console.log(updatedUser);
+                return updatedUser;
+=======
                 // const updatedUser = await User.findByIdAndUpdate(
                 //   context.user._id,
                 //   {
@@ -94,6 +123,7 @@ const resolvers = {
                 targetUser?.save();
                 console.log(targetUser);
                 return targetUser;
+>>>>>>> main
             }
             throw new AuthenticationError("Authentication Error");
         },
@@ -131,9 +161,6 @@ const resolvers = {
                     url,
                 });
                 const savedResource = await newResource.save();
-                // console.log(
-                //   `Successfully added resource with ID: ${savedResource._id}`
-                // );
                 return savedResource;
             }
             catch (error) {
@@ -144,18 +171,15 @@ const resolvers = {
             if (!context.user) {
                 throw new AuthenticationError("You need to be logged in!");
             }
-            // console.log(`Attempting to delete resource with ID: ${_id}`);
             try {
                 const resource = await Resource.findByIdAndDelete(_id);
                 if (!resource) {
-                    // console.log(`Resource with ID: ${_id} not found`);
                     throw new Error("Resource not found");
                 }
                 console.log(`Successfully deleted resource with ID: ${_id}`);
                 return resource;
             }
             catch (error) {
-                // console.error(`Error deleting resource with ID: ${_id}`, error);
                 throw new Error("Error deleting resource");
             }
         },

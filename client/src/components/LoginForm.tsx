@@ -1,114 +1,91 @@
-import { useState } from "react";
-import { useAuth } from "../utils/Auth";
-import axios from "axios";
+import { useState, type FormEvent, type ChangeEvent } from "react";
+import { Link } from "react-router-dom";
+import { useMutation } from "@apollo/client";
+import { LOGIN_MUTATION } from "../utils/mutations";
 
-const API_URL = "http://localhost:3001/graphql";
+import Auth from "../utils/Auth";
 
-const LOGIN_MUTATION = `
-  mutation Login($email: String!, $password: String!) {
-    login(email: $email, password: $password) {
-      token
-      user {
-        id
-        email
-      }
-    }
-  }
-`;
+const Login = () => {
+  const [formState, setFormState] = useState({ email: "", password: "" });
+  const [login, { error, data }] = useMutation(LOGIN_MUTATION);
 
-const LoginForm = () => {
-  const { login } = useAuth();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError("");
-    setLoading(true);
+    setFormState({
+      ...formState,
+      [name]: value,
+    });
+  };
 
-    if (!email || !password) {
-      setError("⚠️ Both fields are required.");
-      setLoading(false);
-      return;
-    }
-
+  const handleFormSubmit = async (event: FormEvent) => {
+    event.preventDefault();
+    console.log(formState);
     try {
-      const response = await axios.post(
-        API_URL,
-        {
-          query: LOGIN_MUTATION,
-          variables: { email, password },
-        },
-        { headers: { "Content-Type": "application/json" } }
-      );
+      const { data } = await login({
+        variables: { ...formState },
+      });
 
-      const data = response.data;
-      if (data.errors) {
-        throw new Error(data.errors[0].message);
-      }
-
-      console.log("✅ Login Successful:", data);
-      localStorage.setItem("token", data.data.login.token);
-      login(data.data.login.token);
-    } catch (err: any) {
-      console.error("❌ Login error:", err);
-      setError(err.message || "⚠️ Invalid credentials.");
-    } finally {
-      setLoading(false);
+      Auth.login(data.login.token);
+    } catch (e) {
+      console.error(e);
     }
+
+    setFormState({
+      email: "",
+      password: "",
+    });
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-lg w-96">
-        <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">
-          Login
-        </h2>
+    <main className="flex-row justify-center mb-4">
+      <div className="col-12 col-lg-10">
+        <div className="card">
+          <h4 className="card-header bg-dark text-light p-2">Login</h4>
+          <div className="card-body">
+            {data ? (
+              <p>
+                Success! You may now head{" "}
+                <Link to="/">back to the homepage.</Link>
+              </p>
+            ) : (
+              <form onSubmit={handleFormSubmit}>
+                <input
+                  className="form-input"
+                  placeholder="Your email"
+                  name="email"
+                  type="email"
+                  value={formState.email}
+                  onChange={handleChange}
+                />
+                <input
+                  className="form-input"
+                  placeholder="******"
+                  name="password"
+                  type="password"
+                  value={formState.password}
+                  onChange={handleChange}
+                />
+                <button
+                  className="btn btn-block btn-primary"
+                  style={{ cursor: "pointer" }}
+                  type="submit"
+                >
+                  Submit
+                </button>
+              </form>
+            )}
 
-        {error && (
-          <p className="text-red-500 text-sm mb-4 text-center">{error}</p>
-        )}
-
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Email
-            </label>
-            <input
-              type="email"
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
+            {error && (
+              <div className="my-3 p-3 bg-danger text-white">
+                {error.message}
+              </div>
+            )}
           </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Password
-            </label>
-            <input
-              type="password"
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
-
-          <button
-            type="submit"
-            className="w-full bg-blue-500 text-white p-3 rounded-lg hover:bg-blue-600 transition font-semibold"
-            disabled={loading}
-          >
-            {loading ? "🔄 Logging in..." : "Login"}
-          </button>
-        </form>
+        </div>
       </div>
-    </div>
+    </main>
   );
 };
 
-export default LoginForm;
+export default Login;
