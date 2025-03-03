@@ -1,6 +1,5 @@
 import { Schema, model } from "mongoose";
 import bcrypt from "bcrypt";
-import resourceSchema from "./Resource.js";
 const userSchema = new Schema({
     username: {
         type: String,
@@ -26,7 +25,12 @@ const userSchema = new Schema({
         min: 8,
         max: 20,
     },
-    savedResource: [resourceSchema],
+    savedResource: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: "resources",
+        },
+    ],
 }, {
     toJSON: {
         virtuals: true,

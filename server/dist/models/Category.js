@@ -1,11 +1,7 @@
 import { Schema } from "mongoose";
 const categorySchema = new Schema({
-    type: {
+    language: {
         type: String,
-        // index: true,
-        // sparse: true,
-        // required: true,
-        // unique: true,
     },
     description: {
         type: String,
