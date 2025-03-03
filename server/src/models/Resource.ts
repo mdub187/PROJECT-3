@@ -1,8 +1,10 @@
-import { Schema, model, type Document } from "mongoose";
+import { Schema, Date, type Document } from "mongoose";
+
 import categorySchema from "./Category.js";
 import type { CategoryDocument } from "./Category.js";
 
 export interface ResourceDocument extends Document {
+  resourceId: string;
   title: string;
   description: string;
   category: CategoryDocument[];
@@ -13,18 +15,16 @@ export interface ResourceDocument extends Document {
 const resourceSchema = new Schema<ResourceDocument>({
   title: {
     type: String,
-    required: true,
+    // required: true,
   },
   description: {
     type: String,
-    required: true,
+    // required: true,
   },
   url: {
     type: String,
   },
-  category: [categorySchema],
+  category: categorySchema,
 });
 
-const Resource = model<ResourceDocument>("Resource", resourceSchema);
-
-export default Resource;
+export default resourceSchema;

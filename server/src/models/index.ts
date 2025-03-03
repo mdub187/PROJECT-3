@@ -1,4 +1,5 @@
-import typeDefs from "../schemas/typedefs";
-import resolvers from "../schemas/resolvers";
+import User from "./User.js";
 
-export { typeDefs, resolvers };
+// import Category from "./Category.js";
+
+export { User };

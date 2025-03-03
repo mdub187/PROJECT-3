@@ -1,18 +1,17 @@
-import { Schema, model } from "mongoose";
+import { Schema } from "mongoose";
 import categorySchema from "./Category.js";
 const resourceSchema = new Schema({
     title: {
         type: String,
-        required: true,
+        // required: true,
     },
     description: {
         type: String,
-        required: true,
+        // required: true,
     },
     url: {
         type: String,
     },
-    category: [categorySchema],
+    category: categorySchema,
 });
-const Resource = model("Resource", resourceSchema);
-export default Resource;
+export default resourceSchema;
