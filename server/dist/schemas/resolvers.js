@@ -30,11 +30,11 @@ const resolvers = {
                 $or: [{ username: args.username }, { email: args.email }],
             });
             if (!user) {
-                return null;
+                throw new AuthenticationError("Authentication Error");
             }
             const correctPw = await user.isCorrectPassword(args.password);
             if (!correctPw) {
-                return null;
+                throw new AuthenticationError("Authentication Error");
             }
             const token = signToken(user.username, user.email, user._id);
             return { token, user };
@@ -78,7 +78,51 @@ const resolvers = {
             }
         },
         // updateResource: {},
-        // updateUser: {},
+        deleteUser: async (_parent, _args, context) => {
+            console.log(context.user);
+            if (context.user) {
+                // throw new AuthenticationError("Must login to delete user");
+                const user = await User.findByIdAndDelete(context.user._id);
+                console.log(user);
+                return;
+            }
+            throw new AuthenticationError("Must be logged in to delete account");
+            //   User.findById(context.user._id);
+            //   if (!user) {
+            //     throw new AuthenticationError("User not found");
+            //   }
+            //   const correctPw = await user.isCorrectPassword(args.password);
+            //   if (!correctPw) {
+            //     throw new AuthenticationError("Authentication Error");
+            //   }
+            //   await User.findByIdAndDelete(context.user._id);
+            //   return "User deleted successfully";
+        },
+        // updateUser: async (_parent: any, args: any, context: any) => {
+        //   if (!context.user) {
+        //     throw new AuthenticationError("Authentication Error");
+        //   }
+        //   const foundUser = await User.findOne({
+        //     username: context.user.username,
+        //   });
+        //   if (!foundUser) {
+        //     throw new AuthenticationError("Authentication Error");
+        //   }
+        //   const updatedUser = await User.findByIdAndUpdate(
+        //     foundUser._id,
+        //     {
+        //       $set: {
+        //         username: args.username || foundUser?.username,
+        //         email: args.email || foundUser?.email,
+        //         password: args.password || foundUser?.password,
+        //       },
+        //     },
+        //     {
+        //       new: true,
+        //     }
+        //   );
+        //   return updatedUser;
+        // },
     },
 };
 export default resolvers;
