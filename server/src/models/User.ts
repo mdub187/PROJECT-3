@@ -1,7 +1,7 @@
 import { Schema, model, Date, type Document } from "mongoose";
 import bcrypt from "bcrypt";
 
-import resourceSchema from "./Resource.js";
+// import resourceSchema from "./Resource.js";
 import type { ResourceDocument } from "./Resource.js";
 
 export interface UserDocument extends Document {
@@ -42,7 +42,12 @@ const userSchema = new Schema<UserDocument>(
       min: 8,
       max: 20,
     },
-    savedResource: [resourceSchema],
+    savedResource: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "resources",
+      },
+    ],
   },
   {
     toJSON: {
