@@ -28,17 +28,14 @@ type Query {
 }
 
 type Mutation {
-<<<<<<< Updated upstream
   createUser(username: String!, email: String!, password: String!): Auth
   login(email: String!, password: String!): Auth
+  deleteUser: Auth
+  #updateUser(password: String!): User
+  
   deleteResource(_id: ID!): Resource
   createResource(title: String!, description: String!, url: String): Resource
-=======
-createUser(username: String!, email: String!, password: String!): Auth
-login(email: String!, password: String!): Auth
-deleteUser: Auth
-#updateUser(password: String!): User
->>>>>>> Stashed changes
+  
 }
 `;
 
