@@ -25,6 +25,7 @@ type Auth {
 
 type Query {
   getSingleUser: User
+  getResource(_id: ID!): Resource
 }
 
 type Mutation {
@@ -32,6 +33,7 @@ type Mutation {
   login(email: String!, password: String!): Auth
   deleteResource(_id: ID!): Resource
   createResource(title: String!, description: String!, url: String): Resource
+  
 }
 `;
 
