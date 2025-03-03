@@ -2,12 +2,8 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { useAuth } from "./utils/Auth";
 import Navbar from "./components/Navbar";
 import LoginForm from "./components/LoginForm";
+import SignupForm from "./components/SignupForm"; // 👈 Import signup form
 import ErrorPage from "./pages/ErrorPage";
-
-function ProtectedRoute({ children }: { children: React.ReactNode }) {
-  const { isAuthenticated } = useAuth();
-  return isAuthenticated ? children : <Navigate to="/" replace />;
-}
 
 function App() {
   const { isAuthenticated } = useAuth();
@@ -24,15 +20,11 @@ function App() {
           }
         />
 
-        {/* Protected Home Route (Without Home.tsx) */}
+        {/* Signup Route */}
         <Route
-          path="/home"
+          path="/signup"
           element={
-            <ProtectedRoute>
-              <h1 className="text-center text-2xl font-bold">
-                Welcome to the Home Page! 🎉
-              </h1>
-            </ProtectedRoute>
+            !isAuthenticated ? <SignupForm /> : <Navigate to="/home" replace />
           }
         />
 
