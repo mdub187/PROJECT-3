@@ -15,9 +15,7 @@ function App() {
         {/* Login Route */}
         <Route
           path="/"
-          element={
-            !isAuthenticated ? <LoginForm /> : <Navigate to="/home" replace />
-          }
+          element={!isAuthenticated ? <LoginForm /> : <Navigate to="/home" replace />}
         />
 
         {/* Signup Route */}
@@ -26,6 +24,7 @@ function App() {
           element={
             !isAuthenticated ? <SignupForm /> : <Navigate to="/home" replace />
           }
+
         />
 
         {/* Error Page */}
