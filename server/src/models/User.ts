@@ -1,19 +1,12 @@
-import { Schema, model, Date, type Document } from "mongoose";
+import { Schema, model, Types, type Document } from "mongoose";
 import bcrypt from "bcrypt";
 
-import resourceSchema from "./Resource.js";
-import type { ResourceDocument } from "./Resource.js";
-
 export interface UserDocument extends Document {
-  userId: string;
   username: string;
-  //   firstName: string;
-  //   lastName: string;
   email: string;
   password: string;
+  savedResources: Types.ObjectId[];
   isCorrectPassword(password: string): Promise<boolean>;
-  savedResource: ResourceDocument[];
-  createdOn: Date;
 }
 
 const userSchema = new Schema<UserDocument>(
@@ -23,14 +16,6 @@ const userSchema = new Schema<UserDocument>(
       required: true,
       unique: true,
     },
-    // firstName: {
-    //   type: String,
-    //   required: true,
-    // },
-    // lastName: {
-    //   type: String,
-    //   required: true,
-    // },
     email: {
       type: String,
       required: true,
@@ -39,12 +24,18 @@ const userSchema = new Schema<UserDocument>(
     password: {
       type: String,
       required: true,
-      min: 8,
-      max: 20,
+      minlength: 8,
+      maxlength: 20,
     },
-    savedResource: [resourceSchema],
+    savedResources: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Resource",
+      },
+    ],
   },
   {
+    timestamps: true,
     toJSON: {
       virtuals: true,
     },
