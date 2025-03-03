@@ -1,35 +1,37 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Routes, Route, Navigate } from "react-router-dom";
+import { useAuth } from "./utils/Auth";
+import Navbar from "./components/Navbar";
+import LoginForm from "./components/LoginForm";
+import SignupForm from "./components/SignupForm"; // 👈 Import signup form
+import ErrorPage from "./pages/ErrorPage";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const { isAuthenticated } = useAuth();
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <Navbar />
+      <Routes>
+        {/* Login Route */}
+        <Route
+          path="/"
+          element={!isAuthenticated ? <LoginForm /> : <Navigate to="/home" replace />}
+        />
+
+        {/* Signup Route */}
+        <Route
+          path="/signup"
+          element={
+            !isAuthenticated ? <SignupForm /> : <Navigate to="/home" replace />
+          }
+
+        />
+
+        {/* Error Page */}
+        <Route path="*" element={<ErrorPage />} />
+      </Routes>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
