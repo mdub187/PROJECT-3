@@ -38,8 +38,12 @@ const resolvers = {
         throw new AuthenticationError("Authentication Error");
       }
     },
+<<<<<<< Updated upstream
     getResource: async (_parent: any, { _id }: any, context: any) => {
 >>>>>>> main
+=======
+    getResource: async (_parent: any, { resourceId }: any, context: any) => {
+>>>>>>> Stashed changes
       if (!context.user) {
         throw new AuthenticationError("You need to be logged in!");
       }
