@@ -28,6 +28,7 @@ type Query {
   getAllUsers: [User]
   getUserByUsername(username: String!): User
 
+  getResource(_id: ID!): Resource
 }
 
 type Mutation {

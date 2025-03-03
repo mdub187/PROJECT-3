@@ -25,9 +25,13 @@ type Auth {
 
 type Query {
   getSingleUser: User
+<<<<<<< HEAD
   getAllUsers: [User]
   getUserByUsername(username: String!): User
 
+=======
+  getResource(_id: ID!): Resource
+>>>>>>> main
 }
 
 type Mutation {
