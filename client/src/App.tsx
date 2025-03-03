@@ -2,7 +2,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { useAuth } from "./utils/Auth";
 import Navbar from "./components/Navbar";
 import LoginForm from "./components/LoginForm";
-import SignupForm from "./components/SignupForm";
+import SignupForm from "./components/SignupForm"; // 👈 Import signup form
 import ErrorPage from "./pages/ErrorPage";
 
 function App() {
@@ -21,7 +21,10 @@ function App() {
         {/* Signup Route */}
         <Route
           path="/signup"
-          element={!isAuthenticated ? <SignupForm /> : <Navigate to="/home" replace />}
+          element={
+            !isAuthenticated ? <SignupForm /> : <Navigate to="/home" replace />
+          }
+
         />
 
         {/* Error Page */}

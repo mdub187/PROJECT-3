@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-const API_URL = "http://localhost:3001/graphql"; // :white_check_mark: Use GraphQL endpoint
+const API_URL = "http://localhost:3001/graphql"; // ✅ Use GraphQL endpoint
 const SIGNUP_MUTATION = `
   mutation Signup($username: String!, $email: String!, $password: String!) {
     signup(username: $username, email: $email, password: $password) {
@@ -38,11 +38,11 @@ const SignupForm = () => {
       if (data.errors) {
         throw new Error(data.errors[0].message);
       }
-      console.log(":white_check_mark: Signup Successful:", data);
-      localStorage.setItem("token", data.data.signup.token); // :white_check_mark: Store JWT
-      navigate("/home"); // :white_check_mark: Redirect to home page
+      console.log("✅ Signup Successful:", data);
+      localStorage.setItem("token", data.data.signup.token); // ✅ Store JWT
+      navigate("/home"); // ✅ Redirect to home page
     } catch (err: any) {
-      console.error(":x: Signup Error:", err);
+      console.error("❌ Signup Error:", err);
       setError(err.message || "Signup failed. Please try again.");
     } finally {
       setLoading(false);
@@ -57,19 +57,10 @@ const SignupForm = () => {
         {error && (
           <p className="text-red-500 text-sm mb-4 text-center">{error}</p>
         )}
-        <form onSubmit={handleSignup} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Username
-            </label>
-            <input
-              type="text"
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-            />
-          </div>
+        {error && (
+          <p className="text-red-500 text-sm mb-4 text-center">{error}</p>
+        )}
+
           <div>
             <label className="block text-sm font-medium text-gray-700">
               Email
@@ -81,19 +72,6 @@ const SignupForm = () => {
               onChange={(e) => setEmail(e.target.value)}
               required
             />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Password
-            </label>
-            <input
-              type="password"
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
           <button
             type="submit"
             className="w-full bg-blue-500 text-white p-3 rounded-lg hover:bg-blue-600 transition font-semibold"

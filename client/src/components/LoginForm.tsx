@@ -1,7 +1,20 @@
 import { useState } from "react";
 import { useAuth } from "../utils/Auth";
-import { loginUser } from "../utils/API";
-import axios from "axios"; // 👈 Import Axios for error checking
+import axios from "axios";
+
+const API_URL = "http://localhost:3001/graphql";
+
+const LOGIN_MUTATION = `
+  mutation Login($email: String!, $password: String!) {
+    login(email: $email, password: $password) {
+      token
+      user {
+        id
+        email
+      }
+    }
+  }
+`;
 
 const LoginForm = () => {
   const { login } = useAuth();
@@ -22,16 +35,26 @@ const LoginForm = () => {
     }
 
     try {
-      const { token } = await loginUser(email, password);
-      login(token);
-    } catch (err) {
-      console.error("❌ Login error:", err);
+      const response = await axios.post(
+        API_URL,
+        {
+          query: LOGIN_MUTATION,
+          variables: { email, password },
+        },
+        { headers: { "Content-Type": "application/json" } }
+      );
 
-      if (axios.isAxiosError(err)) {
-        setError(err.response?.data?.message || "⚠️ Invalid credentials.");
-      } else {
-        setError("⚠️ An unexpected error occurred. Please try again.");
+      const data = response.data;
+      if (data.errors) {
+        throw new Error(data.errors[0].message);
       }
+
+      console.log("✅ Login Successful:", data);
+      localStorage.setItem("token", data.data.login.token);
+      login(data.data.login.token);
+    } catch (err: any) {
+      console.error("❌ Login error:", err);
+      setError(err.message || "⚠️ Invalid credentials.");
     } finally {
       setLoading(false);
     }
@@ -55,7 +78,7 @@ const LoginForm = () => {
             </label>
             <input
               type="email"
-              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -68,7 +91,7 @@ const LoginForm = () => {
             </label>
             <input
               type="password"
-              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
