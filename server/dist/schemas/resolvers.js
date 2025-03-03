@@ -12,6 +12,32 @@ const resolvers = {
             }
             return foundUser;
         },
+<<<<<<< HEAD
+        getAllUsers: async (_parent, _args, context) => {
+            if (context?.user) {
+                const allUsers = await User.find();
+                return allUsers;
+            }
+            else {
+                throw new AuthenticationError("Authentication Error");
+            }
+        },
+        getUserByUsername: async (_parent, args, context) => {
+            if (context?.user) {
+                const foundUser = await User.findOne({
+                    username: args.username,
+                });
+                if (!foundUser) {
+                    throw new AuthenticationError("AUser not found");
+                }
+                return foundUser;
+            }
+            else {
+                throw new AuthenticationError("Authentication Error");
+            }
+        },
+        // getResource: {},
+=======
         getResource: async (_parent, { _id }, context) => {
             if (!context.user) {
                 throw new AuthenticationError("You need to be logged in!");
@@ -27,6 +53,7 @@ const resolvers = {
                 throw new Error("Error fetching resource");
             }
         },
+>>>>>>> main
     },
     Mutation: {
         createUser: async (_parent, args, _context) => {
@@ -38,26 +65,15 @@ const resolvers = {
             return { token, user };
         },
         updateUser: async (_parent, args, context) => {
-            //if the user wants to update the password, then the encryption needs to be called to encrypt the password before it is stored in the database
-            //   console.log(context.user);
             if (context.user) {
-                // return User.findByIdAndUpdate(
-                //     {
-                //       _id: context.user._id,
-                //     },
-                //     args,
-                //     {
-                //       new: true,
-                //     }
-                //   );
                 // const updatedUser = await User.findByIdAndUpdate(
                 //   context.user._id,
                 //   {
                 //     $set: {
-                //       ...args,
-                //       //   username: args.username || context.user.username,
-                //       //   email: args.email || context.user.email,
-                //       //   password: args.password || context.user.password,
+                //       //   ...args,
+                //       username: args.username || context.user.username,
+                //       email: args.email || context.user.email,
+                //       password: args.password || context.user.password,
                 //     },
                 //   },
                 //   {
@@ -65,25 +81,21 @@ const resolvers = {
                 //     runValidators: true,
                 //   }
                 // );
-                const updatedUser = await User.findOneAndUpdate({ _id: context.user._id }, { $set: { ...args } }, { returnDocument: "after", runValidators: true });
-                console.log(updatedUser);
-                return updatedUser;
+                const targetUser = await User.findById(context.user._id);
+                if (args?.username && targetUser?.username) {
+                    targetUser.username = args.username;
+                }
+                if (args?.email && targetUser?.email) {
+                    targetUser.email = args.email;
+                }
+                if (args?.password && targetUser?.password) {
+                    targetUser.password = args.password;
+                }
+                targetUser?.save();
+                console.log(targetUser);
+                return targetUser;
             }
             throw new AuthenticationError("Authentication Error");
-            //   const updatedUser = await User.findByIdAndUpdate(
-            //     foundUser._id,
-            //     {
-            //       $set: {
-            //         username: args.username || foundUser?.username,
-            //         email: args.email || foundUser?.email,
-            //         password: args.password || foundUser?.password,
-            //       },
-            //     },
-            //     {
-            //       new: true,
-            //     }
-            //   );
-            //   return updatedUser;
         },
         deleteUser: async (_parent, _args, context) => {
             console.log(context.user);
