@@ -1,14 +1,11 @@
 import { Schema, model, Date, type Document } from "mongoose";
 import bcrypt from "bcrypt";
-
-// import resourceSchema from "./Resource.js";
 import type { ResourceDocument } from "./Resource.js";
 
 export interface UserDocument extends Document {
   userId: string;
   username: string;
-  //   firstName: string;
-  //   lastName: string;
+
   email: string;
   password: string;
   isCorrectPassword(password: string): Promise<boolean>;
@@ -23,14 +20,7 @@ const userSchema = new Schema<UserDocument>(
       required: true,
       unique: true,
     },
-    // firstName: {
-    //   type: String,
-    //   required: true,
-    // },
-    // lastName: {
-    //   type: String,
-    //   required: true,
-    // },
+
     email: {
       type: String,
       required: true,

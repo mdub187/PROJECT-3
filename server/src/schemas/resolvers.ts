@@ -1,9 +1,7 @@
 import { signToken } from "../services/auth.js";
 import { AuthenticationError } from "../services/auth.js";
-// import User from "../models/User.js";
-// import Resource from "../models/Resource.js";
-
 import { User, Resource } from "../models/index.js";
+
 const resolvers = {
   Query: {
     getSingleUser: async (_parent: any, _args: any, context: any) => {
@@ -27,6 +25,55 @@ const resolvers = {
       const token = signToken(user.username, user.password, user._id);
       return { token, user };
     },
+    updateUser: async (_parent: any, args: any, context: any) => {
+      //if the user wants to update the password, then the encryption needs to be called to encrypt the password before it is stored in the database
+
+      //   console.log(context.user);
+      if (context.user) {
+        // return User.findByIdAndUpdate(
+        //     {
+        //       _id: context.user._id,
+        //     },
+        //     args,
+        //     {
+        //       new: true,
+        //     }
+        //   );
+        const updatedUser = await User.findByIdAndUpdate(
+          context.user._id,
+          {
+            $set: {
+              //   ...args,
+              username: args.username || context.user.username,
+              email: args.email || context.user.email,
+              password: args.password || context.user.password,
+            },
+          },
+          {
+            new: true,
+            runValidators: true,
+          }
+        );
+        // const updatedUser = await User.findOneAndUpdate(
+        //     { _id: context.user._id },
+        //     { $set: { ...args } },
+        //     { returnDocument: "after", runValidators: true }
+        //   );
+        console.log(updatedUser);
+        return updatedUser;
+      }
+      throw new AuthenticationError("Authentication Error");
+    },
+    deleteUser: async (_parent: any, _args: any, context: any) => {
+      console.log(context.user);
+      if (context.user) {
+        const user = await User.findByIdAndDelete(context.user._id);
+        console.log(user);
+        return;
+      }
+      throw new AuthenticationError("Must be logged in to delete account");
+    },
+
     login: async (_parent: any, args: any, _context: any) => {
       const user = await User.findOne({
         $or: [{ username: args.username }, { email: args.email }],
@@ -66,7 +113,6 @@ const resolvers = {
         );
         return savedResource;
       } catch (error) {
-        // console.error("Error adding resource:", error);
         throw new Error("Error adding resource");
       }
     },
@@ -94,57 +140,6 @@ const resolvers = {
     },
 
     // updateResource: {},
-    deleteUser: async (_parent: any, _args: any, context: any) => {
-      console.log(context.user);
-      if (context.user) {
-        // throw new AuthenticationError("Must login to delete user");
-        const user = await User.findByIdAndDelete(context.user._id);
-        console.log(user);
-        return;
-      }
-      throw new AuthenticationError("Must be logged in to delete account");
-
-      //   User.findById(context.user._id);
-      //   if (!user) {
-      //     throw new AuthenticationError("User not found");
-      //   }
-
-      //   const correctPw = await user.isCorrectPassword(args.password);
-
-      //   if (!correctPw) {
-      //     throw new AuthenticationError("Authentication Error");
-      //   }
-
-      //   await User.findByIdAndDelete(context.user._id);
-
-      //   return "User deleted successfully";
-    },
-    // updateUser: async (_parent: any, args: any, context: any) => {
-    //   if (!context.user) {
-    //     throw new AuthenticationError("Authentication Error");
-    //   }
-    //   const foundUser = await User.findOne({
-    //     username: context.user.username,
-    //   });
-    //   if (!foundUser) {
-    //     throw new AuthenticationError("Authentication Error");
-    //   }
-
-    //   const updatedUser = await User.findByIdAndUpdate(
-    //     foundUser._id,
-    //     {
-    //       $set: {
-    //         username: args.username || foundUser?.username,
-    //         email: args.email || foundUser?.email,
-    //         password: args.password || foundUser?.password,
-    //       },
-    //     },
-    //     {
-    //       new: true,
-    //     }
-    //   );
-    //   return updatedUser;
-    // },
   },
 };
 
