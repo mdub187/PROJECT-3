@@ -6,14 +6,14 @@ type User {
 }
 
 type Resource {
-  _id: ID!
+  resourceId: ID!
   title: String!
   description: String!
   url: String
 }
 
 type Category {
-  _id: ID!
+  categoryId: ID!
   language: String!
   description: String
 }
