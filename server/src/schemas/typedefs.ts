@@ -3,6 +3,7 @@ type User {
   _id: ID!
   username: String!
   email: String!
+  savedResource: [Resource]
 }
 
 type Resource {
@@ -25,17 +26,23 @@ type Auth {
 
 type Query {
   getSingleUser: User
+  getAllUsers: [User]
+  getUserByUsername(username: String!): User
+
   getResource(_id: ID!): Resource
+  getAllResources: Resource
 }
 
 type Mutation {
   createUser(username: String!, email: String!, password: String!): Auth
   login(email: String!, password: String!): Auth
   deleteUser: Auth
-  updateUser(username: String, email: String, password: String): Auth
+  updateUser(username: String, email: String, password: String): User
 
   deleteResource(_id: ID!): Resource
   createResource(title: String!, description: String!, url: String): Resource
+  saveResource(resourceId: String!, title: String!, description: String!, url: String): User
+  removeResource(resourceId: String!): User
   
 }
 `;

@@ -25,14 +25,20 @@ type Auth {
 
 type Query {
   getSingleUser: User
+<<<<<<< HEAD
+  getAllUsers: [User]
+  getUserByUsername(username: String!): User
+
+=======
   getResource(_id: ID!): Resource
+>>>>>>> main
 }
 
 type Mutation {
   createUser(username: String!, email: String!, password: String!): Auth
   login(email: String!, password: String!): Auth
   deleteUser: Auth
-  updateUser(username: String, email: String, password: String): Auth
+  updateUser(username: String, email: String, password: String): User
 
   deleteResource(_id: ID!): Resource
   createResource(title: String!, description: String!, url: String): Resource

@@ -1,6 +1,7 @@
 import { signToken } from "../services/auth.js";
 import { AuthenticationError } from "../services/auth.js";
 import { User, Resource } from "../models/index.js";
+import { UserDocument } from "../models/User.js";
 
 const resolvers = {
   Query: {
@@ -13,7 +14,32 @@ const resolvers = {
       }
       return foundUser;
     },
+<<<<<<< HEAD
     getResource: async (_parent: any, { resourceId }: any, context: any) => {
+=======
+    getAllUsers: async (_parent: any, _args: any, context: any) => {
+      if (context?.user) {
+        const allUsers = await User.find();
+        return allUsers;
+      } else {
+        throw new AuthenticationError("Authentication Error");
+      }
+    },
+    getUserByUsername: async (_parent: any, args: any, context: any) => {
+      if (context?.user) {
+        const foundUser = await User.findOne({
+          username: args.username,
+        });
+        if (!foundUser) {
+          throw new AuthenticationError("User not found");
+        }
+        return foundUser;
+      } else {
+        throw new AuthenticationError("Authentication Error");
+      }
+    },
+    getResource: async (_parent: any, { _id }: any, context: any) => {
+>>>>>>> main
       if (!context.user) {
         throw new AuthenticationError("You need to be logged in!");
       }
@@ -28,6 +54,11 @@ const resolvers = {
         throw new Error("Error fetching resource");
       }
     },
+    getAllResources: async (_parent: any, _args: any) => {
+      const getResources = await Resource.find();
+      return getResources;
+    },
+    //getResourceByCategory()
   },
   Mutation: {
     createUser: async (_parent: any, args: any, _context: any) => {
@@ -40,41 +71,42 @@ const resolvers = {
       return { token, user };
     },
     updateUser: async (_parent: any, args: any, context: any) => {
-      //if the user wants to update the password, then the encryption needs to be called to encrypt the password before it is stored in the database
-
-      //   console.log(context.user);
       if (context.user) {
-        // return User.findByIdAndUpdate(
-        //     {
-        //       _id: context.user._id,
+        // const updatedUser = await User.findByIdAndUpdate(
+        //   context.user._id,
+        //   {
+        //     $set: {
+        //       //   ...args,
+        //       username: args.username || context.user.username,
+        //       email: args.email || context.user.email,
+        //       password: args.password || context.user.password,
         //     },
-        //     args,
-        //     {
-        //       new: true,
-        //     }
-        //   );
-        const updatedUser = await User.findByIdAndUpdate(
-          context.user._id,
-          {
-            $set: {
-              //   ...args,
-              username: args.username || context.user.username,
-              email: args.email || context.user.email,
-              password: args.password || context.user.password,
-            },
-          },
-          {
-            new: true,
-            runValidators: true,
-          }
+        //   },
+        //   {
+        //     new: true,
+        //     runValidators: true,
+        //   }
+        // );
+        const targetUser: UserDocument | null = await User.findById(
+          context.user._id
         );
-        // const updatedUser = await User.findOneAndUpdate(
-        //     { _id: context.user._id },
-        //     { $set: { ...args } },
-        //     { returnDocument: "after", runValidators: true }
-        //   );
-        console.log(updatedUser);
-        return updatedUser;
+
+        if (args?.username && targetUser?.username) {
+          targetUser.username = args.username;
+        }
+
+        if (args?.email && targetUser?.email) {
+          targetUser.email = args.email;
+        }
+
+        if (args?.password && targetUser?.password) {
+          targetUser.password = args.password;
+        }
+
+        targetUser?.save();
+
+        console.log(targetUser);
+        return targetUser;
       }
       throw new AuthenticationError("Authentication Error");
     },
@@ -147,6 +179,29 @@ const resolvers = {
     },
 
     // updateResource: {},
+    saveResource: async (_parent: any, args: any, context: any) => {
+      try {
+        const updatedUser = await User.findByIdAndUpdate(
+          { _id: context.user._id },
+          { $addToSet: { savedResource: args.resourceId } },
+          { new: true, runValidators: true }
+        );
+        return updatedUser;
+      } catch (err) {
+        return null;
+      }
+    },
+    removeResource: async (_parent: any, args: any, context: any) => {
+      const updatedUser = await User.findByIdAndUpdate(
+        { _id: context.user._id },
+        { $pull: { savedResource: { resourceId: args.resourceId } } },
+        { new: true }
+      );
+      if (!updatedUser) {
+        return null;
+      }
+      return updatedUser;
+    },
   },
 };
 
