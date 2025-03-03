@@ -25,6 +25,7 @@ type Auth {
 
 type Query {
   getSingleUser: User
+  getResource(_id: ID!): Resource
 }
 
 type Mutation {

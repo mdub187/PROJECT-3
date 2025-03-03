@@ -13,7 +13,21 @@ const resolvers = {
       }
       return foundUser;
     },
-    // getResource: {},
+    getResource: async (_parent: any, { _id }: any, context: any) => {
+      if (!context.user) {
+        throw new AuthenticationError("You need to be logged in!");
+      }
+
+      try {
+        const resource = await Resource.findById(_id);
+        if (!resource) {
+          throw new Error("Resource not found");
+        }
+        return resource;
+      } catch (error) {
+        throw new Error("Error fetching resource");
+      }
+    },
   },
   Mutation: {
     createUser: async (_parent: any, args: any, _context: any) => {
@@ -108,9 +122,6 @@ const resolvers = {
 
         const savedResource = await newResource.save();
 
-        console.log(
-          `Successfully added resource with ID: ${savedResource._id}`
-        );
         return savedResource;
       } catch (error) {
         throw new Error("Error adding resource");
@@ -121,20 +132,16 @@ const resolvers = {
         throw new AuthenticationError("You need to be logged in!");
       }
 
-      console.log(`Attempting to delete resource with ID: ${_id}`);
-
       try {
         const resource = await Resource.findByIdAndDelete(_id);
 
         if (!resource) {
-          console.log(`Resource with ID: ${_id} not found`);
           throw new Error("Resource not found");
         }
 
         console.log(`Successfully deleted resource with ID: ${_id}`);
         return resource;
       } catch (error) {
-        console.error(`Error deleting resource with ID: ${_id}`, error);
         throw new Error("Error deleting resource");
       }
     },
