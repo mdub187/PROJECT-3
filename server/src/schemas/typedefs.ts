@@ -7,7 +7,7 @@ type User {
 }
 
 type Resource {
-  resourceId: ID!
+  _id: ID!
   title: String!
   description: String!
   url: String
@@ -41,8 +41,8 @@ type Mutation {
 
   deleteResource(_id: ID!): Resource
   createResource(title: String!, description: String!, url: String): Resource
-  saveResource(resourceId: String!, title: String!, description: String!, url: String): User
-  removeResource(resourceId: String!): User
+  #saveResource(resourceId: String!, title: String!, description: String!, url: String): User
+  #removeResource(resourceId: String!): User
   
 }
 `;
