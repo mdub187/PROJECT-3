@@ -179,29 +179,29 @@ const resolvers = {
     },
 
     // updateResource: {},
-    saveResource: async (_parent: any, args: any, context: any) => {
-      try {
-        const updatedUser = await User.findByIdAndUpdate(
-          { _id: context.user._id },
-          { $addToSet: { savedResource: args.resourceId } },
-          { new: true, runValidators: true }
-        );
-        return updatedUser;
-      } catch (err) {
-        return null;
-      }
-    },
-    removeResource: async (_parent: any, args: any, context: any) => {
-      const updatedUser = await User.findByIdAndUpdate(
-        { _id: context.user._id },
-        { $pull: { savedResource: { resourceId: args.resourceId } } },
-        { new: true }
-      );
-      if (!updatedUser) {
-        return null;
-      }
-      return updatedUser;
-    },
+    // saveResource: async (_parent: any, args: any, context: any) => {
+    //   try {
+    //     const updatedUser = await User.findByIdAndUpdate(
+    //       { _id: context.user._id },
+    //       { $addToSet: { savedResource: args.resourceId } },
+    //       { new: true, runValidators: true }
+    //     );
+    //     return updatedUser;
+    //   } catch (err) {
+    //     return null;
+    //   }
+    // },
+    // removeResource: async (_parent: any, args: any, context: any) => {
+    //   const updatedUser = await User.findByIdAndUpdate(
+    //     { _id: context.user._id },
+    //     { $pull: { savedResource: { resourceId: args.resourceId } } },
+    //     { new: true }
+    //   );
+    //   if (!updatedUser) {
+    //     return null;
+    //   }
+    //   return updatedUser;
+    // },
   },
 };
 

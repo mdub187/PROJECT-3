@@ -3,17 +3,18 @@ type User {
   _id: ID!
   username: String!
   email: String!
+  savedResource: [Resource]
 }
 
 type Resource {
-  _id: ID!
+  resourceId: ID!
   title: String!
   description: String!
   url: String
 }
 
 type Category {
-  _id: ID!
+  categoryId: ID!
   language: String!
   description: String
 }
@@ -25,13 +26,11 @@ type Auth {
 
 type Query {
   getSingleUser: User
-<<<<<<< HEAD
   getAllUsers: [User]
   getUserByUsername(username: String!): User
 
-=======
-  getResource(_id: ID!): Resource
->>>>>>> main
+  getResource(resourceId: ID!): Resource
+ # getAllResources: Resource
 }
 
 type Mutation {
@@ -40,8 +39,10 @@ type Mutation {
   deleteUser: Auth
   updateUser(username: String, email: String, password: String): User
 
-  deleteResource(_id: ID!): Resource
+  deleteResource(resourceId: ID!): Resource
   createResource(title: String!, description: String!, url: String): Resource
+  #saveResource(resourceId: String!, title: String!, description: String!, url: String): User
+  #removeResource(resourceId: String!): User
   
 }
 `;
