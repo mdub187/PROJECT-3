@@ -14,9 +14,6 @@ const resolvers = {
       }
       return foundUser;
     },
-<<<<<<< HEAD
-    getResource: async (_parent: any, { resourceId }: any, context: any) => {
-=======
     getAllUsers: async (_parent: any, _args: any, context: any) => {
       if (context?.user) {
         const allUsers = await User.find();
@@ -39,13 +36,12 @@ const resolvers = {
       }
     },
     getResource: async (_parent: any, { _id }: any, context: any) => {
->>>>>>> main
       if (!context.user) {
         throw new AuthenticationError("You need to be logged in!");
       }
 
       try {
-        const resource = await Resource.findById(resourceId);
+        const resource = await Resource.findById(_id);
         if (!resource) {
           throw new Error("Resource not found");
         }
@@ -159,19 +155,19 @@ const resolvers = {
         throw new Error("Error adding resource");
       }
     },
-    deleteResource: async (_parent: any, { resourceId }: any, context: any) => {
+    deleteResource: async (_parent: any, { _id }: any, context: any) => {
       if (!context.user) {
         throw new AuthenticationError("You need to be logged in!");
       }
 
       try {
-        const resource = await Resource.findByIdAndDelete(resourceId);
+        const resource = await Resource.findByIdAndDelete(_id);
 
         if (!resource) {
           throw new Error("Resource not found");
         }
 
-        console.log(`Successfully deleted resource with ID: ${resourceId}`);
+        console.log(`Successfully deleted resource with ID: ${_id}`);
         return resource;
       } catch (error) {
         throw new Error("Error deleting resource");

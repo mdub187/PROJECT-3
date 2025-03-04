@@ -29,9 +29,10 @@ type Query {
   getAllUsers: [User]
   getUserByUsername(username: String!): User
 
-  getResource(resourceId: ID!): Resource
- # getAllResources: Resource
-}
+
+  getResource(_id: ID!): Resource
+  getAllResources: Resource
+
 
 type Mutation {
   createUser(username: String!, email: String!, password: String!): Auth

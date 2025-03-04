@@ -223,7 +223,9 @@ const resolvers = {
                 throw new AuthenticationError("Authentication Error");
             }
         },
-        getResource: async (_parent, { resourceId }, context) => {
+
+        getResource: async (_parent, { _id }, context) => {
+
             if (!context.user) {
                 throw new AuthenticationError("You need to be logged in!");
             }
@@ -238,10 +240,17 @@ const resolvers = {
                 throw new Error("Error fetching resource");
             }
         },
+
+        getAllResources: async (_parent, _args) => {
+            const getResources = await Resource.find();
+            return getResources;
+        },
+
         // getAllResources: async (_parent: any, _args: any) => {
         //   const getResources = await Resource.find();
         //   return getResources;
         // },
+
         //getResourceByCategory()
     },
     Mutation: {
@@ -255,35 +264,6 @@ const resolvers = {
         },
         updateUser: async (_parent, args, context) => {
             if (context.user) {
-<<<<<<< HEAD
-                // return User.findByIdAndUpdate(
-                //     {
-                //       _id: context.user._id,
-                //     },
-                //     args,
-                //     {
-                //       new: true,
-                //     }
-                //   );
-                const updatedUser = await User.findByIdAndUpdate(context.user._id, {
-                    $set: {
-                        //   ...args,
-                        username: args.username || context.user.username,
-                        email: args.email || context.user.email,
-                        password: args.password || context.user.password,
-                    },
-                }, {
-                    new: true,
-                    runValidators: true,
-                });
-                // const updatedUser = await User.findOneAndUpdate(
-                //     { _id: context.user._id },
-                //     { $set: { ...args } },
-                //     { returnDocument: "after", runValidators: true }
-                //   );
-                console.log(updatedUser);
-                return updatedUser;
-=======
                 // const updatedUser = await User.findByIdAndUpdate(
                 //   context.user._id,
                 //   {
@@ -312,7 +292,6 @@ const resolvers = {
                 targetUser?.save();
                 console.log(targetUser);
                 return targetUser;
->>>>>>> main
             }
             throw new AuthenticationError("Authentication Error");
         },
