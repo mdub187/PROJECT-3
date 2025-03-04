@@ -7,7 +7,7 @@ type User {
 }
 
 type Resource {
-  _id: ID!
+  #resourceId: ID!
   title: String!
   description: String!
   url: String
@@ -29,8 +29,8 @@ type Query {
   getAllUsers: [User]
   getUserByUsername(username: String!): User
 
-  getResource(_id: ID!): Resource
-  getAllResources: Resource
+  getResource(resourceId: ID!): Resource
+  getAllResources: [Resource]
 }
 
 type Mutation {
@@ -39,9 +39,10 @@ type Mutation {
   deleteUser: Auth
   updateUser(username: String, email: String, password: String): User
 
-  deleteResource(_id: ID!): Resource
+  deleteResource(resourceId: ID!): Resource
   createResource(title: String!, description: String!, url: String): Resource
-  #saveResource(resourceId: String!, title: String!, description: String!, url: String): User
+  updateResource(resourceId: ID!, title: String, description: String, url: String): Resource
+  saveResource(resourceId: String!, title: String!, description: String!, url: String): User
   #removeResource(resourceId: String!): User
   
 }
