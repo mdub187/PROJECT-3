@@ -55,7 +55,7 @@ export const SAVED_RESOURCE = gql`
 
 export const DELETE_RESOURCE = gql`
   mutation DeleteBook($bookId: String!) {
-    deleteRESOURCE(bookId: $bookId) {
+    deleteResource(bookId: $bookId) {
       _id
       username
       email
@@ -65,6 +65,28 @@ export const DELETE_RESOURCE = gql`
         description
         url
       }
+    }
+  }
+`;
+
+export const CREATE_RESOURCE = gql`
+  mutation createResource(
+    $title: String!
+    $description: String!
+    $category: String
+    $url: String
+  ) {
+    createResource(
+      resourceId: $resourceId
+      description: $description
+      category: $category
+      url: $url
+    ) {
+      _id
+      title
+      category
+      description
+      url
     }
   }
 `;

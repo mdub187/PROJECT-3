@@ -54,6 +54,7 @@ const resolvers = {
       const getResources = await Resource.find();
       return getResources;
     },
+    
     //getResourceByCategory()
   },
   Mutation: {

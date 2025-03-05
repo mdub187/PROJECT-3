@@ -9,6 +9,7 @@ type User {
 type Resource {
   resourceId: ID!
   title: String!
+  category: String!
   description: String!
   url: String
 }
