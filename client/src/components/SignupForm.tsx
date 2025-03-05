@@ -18,7 +18,7 @@ const SignupForm = ({}: { handleModalClose: () => void }) => {
     username: "",
     email: "",
     password: "",
-    saveResource: [],
+    savedResource: [],
   });
   // set state for form validation
   const [validated] = useState(false);
@@ -67,7 +67,7 @@ const SignupForm = ({}: { handleModalClose: () => void }) => {
       username: "",
       email: "",
       password: "",
-      saveResource: [],
+      savedResource: [],
     });
   };
 

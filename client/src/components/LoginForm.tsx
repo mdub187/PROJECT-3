@@ -1,15 +1,12 @@
 import { useState } from "react";
 import type { ChangeEvent, FormEvent } from "react";
 import { Form, Button, Alert } from "react-bootstrap";
-// import {link} from 'react-router-dom'
-
 
 import { useMutation } from "@apollo/client";
 import { LOGIN_MUTATION } from "../utils/mutations";
 
 import Auth from "../utils/Auth";
 import type { User } from "../models/User";
-
 
 const LoginForm = ({}: { handleModalClose: () => void }) => {
   const [loginUser] = useMutation(LOGIN_MUTATION);
@@ -18,7 +15,7 @@ const LoginForm = ({}: { handleModalClose: () => void }) => {
     username: "",
     email: "",
     password: "",
-    saveResource: [],
+    savedResource: [],
   });
   const [validated] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
@@ -55,7 +52,7 @@ const LoginForm = ({}: { handleModalClose: () => void }) => {
       username: "",
       email: "",
       password: "",
-      saveResource: [],
+      savedResource: [],
     });
   };
 
