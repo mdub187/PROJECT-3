@@ -73,16 +73,16 @@ export const CREATE_RESOURCE = gql`
   mutation createResource(
     $title: String!
     $description: String!
-    $category: String
+    $category: String!
     $url: String
   ) {
     createResource(
-      resourceId: $resourceId
+      title: $title
       description: $description
       category: $category
       url: $url
     ) {
-      _id
+      resourceId
       title
       category
       description

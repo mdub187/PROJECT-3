@@ -1,5 +1,4 @@
 import { Schema, model } from "mongoose";
-import categorySchema from "./Category.js";
 const resourceSchema = new Schema({
     title: {
         type: String,
@@ -12,7 +11,17 @@ const resourceSchema = new Schema({
     url: {
         type: String,
     },
-    category: categorySchema,
+    category: {
+        type: String,
+        required: true,
+    },
+}, {
+    toJSON: {
+        virtuals: true,
+    },
+});
+resourceSchema.virtual("resourceId").get(function () {
+    return this._id;
 });
 const Resource = model("Resource", resourceSchema);
 export default Resource;

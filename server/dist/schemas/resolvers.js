@@ -54,6 +54,15 @@ const resolvers = {
             const getResources = await Resource.find();
             return getResources;
         },
+        searchResources: async (_parent, { searchTerm }, _context) => {
+            const resources = await Resource.find({
+                title: {
+                    $regex: searchTerm,
+                    $options: "i",
+                },
+            });
+            return resources;
+        },
         //getResourceByCategory()
     },
     Mutation: {
@@ -121,20 +130,28 @@ const resolvers = {
             const token = signToken(user.username, user.email, user._id);
             return { token, user };
         },
-        createResource: async (_parent, { title, description, url }, context) => {
+        createResource: async (_parent, { title, description, url, category }, context) => {
             if (!context.user) {
                 throw new AuthenticationError("You need to be logged in!");
             }
             try {
-                const newResource = new Resource({
+                // const newResource = new Resource({
+                //   title,
+                //   description,
+                //   url,
+                //   category,
+                // });
+                // const savedResource = await newResource.save();
+                const savedResource = await Resource.create({
                     title,
                     description,
                     url,
+                    category,
                 });
-                const savedResource = await newResource.save();
                 return savedResource;
             }
             catch (error) {
+                console.log(error);
                 throw new Error("Error adding resource");
             }
         },
