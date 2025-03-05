@@ -3,7 +3,6 @@ import type { ChangeEvent, FormEvent } from "react";
 import { Form, Button, Alert } from "react-bootstrap";
 import { useMutation } from "@apollo/client";
 import { CREATE_RESOURCE } from "../utils/mutations";
-import Auth from "../utils/Auth";
 import type { Resource } from "../models/Resource";
 
 const CreateResourceForm = ({}: { handleModalClose: () => void }) => {
@@ -35,17 +34,19 @@ const CreateResourceForm = ({}: { handleModalClose: () => void }) => {
       event.stopPropagation();
     }
 
+    console.log(userFormData);
+
     try {
       const response = await createResource({
         variables: {
           title: userFormData.title,
           category: userFormData.category,
           description: userFormData.description,
+          url: userFormData.url,
         },
       });
-      const token = response.data.createResource.token;
 
-      Auth.login(token);
+      console.log("resource has been added");
     } catch (err) {
       console.error(err);
       setShowAlert(true);
@@ -117,6 +118,17 @@ const CreateResourceForm = ({}: { handleModalClose: () => void }) => {
           <Form.Control.Feedback type="invalid">
             description is required!
           </Form.Control.Feedback>
+        </Form.Group>
+
+        <Form.Group className="mb-3">
+          <Form.Label htmlFor="url">url</Form.Label>
+          <Form.Control
+            type="url"
+            placeholder="Your url"
+            name="url"
+            onChange={handleInputChange}
+            value={userFormData.url || ""}
+          />
         </Form.Group>
         <Button
           disabled={

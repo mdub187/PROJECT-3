@@ -2,7 +2,7 @@ import { gql } from "@apollo/client";
 
 export const SEARCH_RESOURCES = gql`
   query SearchResources($searchTerm: String!) {
-    getAllResources(searchTerm: $searchTerm) {
+    searchResources(searchTerm: $searchTerm) {
       resourceId
       title
       description

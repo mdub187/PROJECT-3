@@ -1,6 +1,14 @@
 import { useState, useEffect } from "react";
 import type { FormEvent } from "react";
-import { Container, Col, Form, Button, Card, Row } from "react-bootstrap";
+import {
+  Container,
+  Col,
+  Form,
+  Button,
+  Card,
+  Row,
+  Modal,
+} from "react-bootstrap";
 import Auth from "../utils/Auth";
 import { useQuery, useMutation } from "@apollo/client";
 import { SEARCH_RESOURCES } from "../utils/queries";
@@ -8,8 +16,11 @@ import { SAVED_RESOURCE } from "../utils/mutations";
 
 import { saveResourceIds, getSavedResourceIds } from "../utils/localStorage";
 import type { Resource } from "../models/Resource";
+import CreateResourceForm from "../components/CreateResource";
 
 const SearchResources = () => {
+  const [showModal, setShowModal] = useState(false);
+
   const [savedResourceIds, setSavedResourceIds] = useState(
     getSavedResourceIds()
   );
@@ -38,6 +49,11 @@ const SearchResources = () => {
     if (!searchInput) {
       return;
     }
+    // const { data } = useQuery(SEARCH_RESOURCES, {
+    //   variables: {
+    //     searchTerm: searchInput,
+    //   },
+    // });
   };
 
   const handleSaveResource = async (resourceId: string) => {
@@ -94,8 +110,13 @@ const SearchResources = () => {
                 >
                   {loading ? "Searching..." : "Submit Search"}
                 </Button>
-                <Button type="submit" variant="primary" size="lg">
-                  Save Resource
+                <Button
+                  onClick={() => setShowModal(true)}
+                  type="button"
+                  variant="primary"
+                  size="lg"
+                >
+                  Create Resource
                 </Button>
               </Col>
             </Row>
@@ -140,6 +161,20 @@ const SearchResources = () => {
           ))}
         </Row>
       </Container>
+      <Modal
+        size="lg"
+        show={showModal}
+        onHide={() => setShowModal(false)}
+        aria-labelledby="resource-modal"
+      >
+        {/* tab container to do either signup or login component */}
+        <Modal.Header closeButton>
+          <Modal.Title id="resource-modal">Create Resource</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <CreateResourceForm handleModalClose={() => setShowModal(false)} />
+        </Modal.Body>
+      </Modal>
     </>
   );
 };

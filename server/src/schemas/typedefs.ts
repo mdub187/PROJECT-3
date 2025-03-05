@@ -32,6 +32,7 @@ type Query {
 
   getResource(resourceId: ID!): Resource
   getAllResources: [Resource]
+  searchResources(searchTerm: String!): [Resource]
 }
 
 type Mutation {
@@ -41,7 +42,7 @@ type Mutation {
   updateUser(username: String, email: String, password: String): User
 
   deleteResource(resourceId: ID!): Resource
-  createResource(title: String!, description: String!, url: String): Resource
+  createResource(title: String!, description: String!, url: String, category: String!): Resource
   updateResource(resourceId: ID!, title: String, description: String, url: String): Resource
   saveResource(resourceId: String!, title: String!, description: String!, url: String): User
   #removeResource(resourceId: String!): User

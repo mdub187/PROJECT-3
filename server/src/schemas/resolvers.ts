@@ -54,7 +54,20 @@ const resolvers = {
       const getResources = await Resource.find();
       return getResources;
     },
-    
+    searchResources: async (
+      _parent: any,
+      { searchTerm }: any,
+      _context: any
+    ) => {
+      const resources = await Resource.find({
+        title: {
+          $regex: searchTerm,
+          $options: "i",
+        },
+      });
+      return resources;
+    },
+
     //getResourceByCategory()
   },
   Mutation: {
@@ -135,7 +148,7 @@ const resolvers = {
     },
     createResource: async (
       _parent: any,
-      { title, description, url }: any,
+      { title, description, url, category }: any,
       context: any
     ) => {
       if (!context.user) {
@@ -143,16 +156,25 @@ const resolvers = {
       }
 
       try {
-        const newResource = new Resource({
+        // const newResource = new Resource({
+        //   title,
+        //   description,
+        //   url,
+        //   category,
+        // });
+
+        // const savedResource = await newResource.save();
+
+        const savedResource = await Resource.create({
           title,
           description,
           url,
+          category,
         });
-
-        const savedResource = await newResource.save();
 
         return savedResource;
       } catch (error) {
+        console.log(error);
         throw new Error("Error adding resource");
       }
     },
@@ -217,7 +239,7 @@ const resolvers = {
       try {
         const updatedUser = await User.findByIdAndUpdate(
           { _id: context.user._id },
-          { $addToSet: { savedResource: args.resourceId } }, 
+          { $addToSet: { savedResource: args.resourceId } },
           { new: true, runValidators: true }
         );
         return updatedUser;
