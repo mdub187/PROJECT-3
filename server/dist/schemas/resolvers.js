@@ -121,7 +121,7 @@ const resolvers = {
                 $or: [{ username: args.username }, { email: args.email }],
             });
             if (!user) {
-                throw new AuthenticationError("Authentication Error");
+                throw new AuthenticationError("No User Found");
             }
             const correctPw = await user.isCorrectPassword(args.password);
             if (!correctPw) {
