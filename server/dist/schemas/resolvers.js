@@ -200,7 +200,7 @@ const resolvers = {
         // },
         saveResource: async (_parent, args, context) => {
             try {
-                const updatedUser = await User.findByIdAndUpdate({ _id: context.user._id }, { $addToSet: { savedResource: args.resourceId } }, { new: true, runValidators: true });
+                const updatedUser = await User.findByIdAndUpdate({ _id: context.user._id }, { $addToSet: { savedResources: args.resourceId } }, { new: true, runValidators: true });
                 return updatedUser;
             }
             catch (err) {
