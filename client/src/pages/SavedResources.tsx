@@ -50,14 +50,14 @@ const SavedResources = () => {
       </div>
       <Container>
         <h2 className="pt-5">
-          {userData.savedResources.length
+          {userData?.savedResources?.length > 0
             ? `Viewing ${userData.savedResources.length} saved ${
                 userData.savedResources.length === 1 ? "resource" : "resources"
               }:`
             : "You have no saved resources!"}
         </h2>
         <Row>
-          {userData.savedResources.map((resource: any) => {
+          {userData?.savedResources?.map((resource: any) => {
             return (
               <Col md="4">
                 <Card key={resource.resourceId} border="dark">

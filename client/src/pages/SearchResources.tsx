@@ -65,7 +65,7 @@ const SearchResources = () => {
     if (!token) {
       return false;
     }
-// check if user is logged in using auth.ts, if they are show them search bar, else do not show search bar.
+    // check if user is logged in using auth.ts, if they are show them search bar, else do not show search bar.
     try {
       await saveResource({
         variables: {
@@ -91,7 +91,7 @@ const SearchResources = () => {
       console.error("Error saving resource:", err);
     }
   };
-// check if user is logged in using auth.ts, if they are show them search bar, else do not show search bar.
+  // check if user is logged in using auth.ts, if they are show them search bar, else do not show search bar.
   return (
     <>
       <div className="text-light bg-dark p-5">
