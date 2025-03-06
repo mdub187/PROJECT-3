@@ -70,7 +70,7 @@ const ResourceCard: React.FC<ResourceCardProps> = ({ resource }) => {
     }
   };
 
-  return (
+  return ( 
     <div className="resource-card">
       <h3>{resource.title}</h3>
       <p>{resource.description}</p>
