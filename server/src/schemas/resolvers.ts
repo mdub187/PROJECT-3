@@ -67,8 +67,6 @@ const resolvers = {
       });
       return resources;
     },
-
-    //getResourceByCategory()
   },
   Mutation: {
     createUser: async (_parent: any, args: any, _context: any) => {
@@ -82,21 +80,6 @@ const resolvers = {
     },
     updateUser: async (_parent: any, args: any, context: any) => {
       if (context.user) {
-        // const updatedUser = await User.findByIdAndUpdate(
-        //   context.user._id,
-        //   {
-        //     $set: {
-        //       //   ...args,
-        //       username: args.username || context.user.username,
-        //       email: args.email || context.user.email,
-        //       password: args.password || context.user.password,
-        //     },
-        //   },
-        //   {
-        //     new: true,
-        //     runValidators: true,
-        //   }
-        // );
         const targetUser: UserDocument | null = await User.findById(
           context.user._id
         );
@@ -156,15 +139,6 @@ const resolvers = {
       }
 
       try {
-        // const newResource = new Resource({
-        //   title,
-        //   description,
-        //   url,
-        //   category,
-        // });
-
-        // const savedResource = await newResource.save();
-
         const savedResource = await Resource.create({
           title,
           description,
@@ -221,19 +195,6 @@ const resolvers = {
         throw new Error("Error updating resource");
       }
     },
-
-    // saveResource: async (_parent: any, args: any, context: any) => {
-    //   try {
-    //     const updatedUser = await User.findByIdAndUpdate(
-    //       { _id: context.user._id },
-    //       { $addToSet: { savedResource: args.resourceId } },
-    //       { new: true, runValidators: true }
-    //     );
-    //     return updatedUser;
-    //   } catch (err) {
-    //     return null;
-    //   }
-    // },
 
     saveResource: async (_parent: any, args: any, context: any) => {
       try {

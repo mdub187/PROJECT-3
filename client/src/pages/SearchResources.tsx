@@ -65,7 +65,7 @@ const SearchResources = () => {
     if (!token) {
       return false;
     }
-    // check if user is logged in using auth.ts, if they are show them search bar, else do not show search bar.
+
     try {
       await saveResource({
         variables: {
@@ -75,23 +75,19 @@ const SearchResources = () => {
           url: resourceToSave.url,
         },
       });
-      // setSavedResourceIds((prevIds: any) => [
-      //   ...prevIds,
-      //   resourceToSave.resourceId,
-      // ]);
+
       const updatedSavedResourceIds = [
         ...savedResourceIds,
         resourceToSave.resourceId,
       ];
       setSavedResourceIds(updatedSavedResourceIds);
 
-      // Save the updated array to localStorage
       saveResourceIds(updatedSavedResourceIds);
     } catch (err) {
       console.error("Error saving resource:", err);
     }
   };
-  // check if user is logged in using auth.ts, if they are show them search bar, else do not show search bar.
+
   return (
     <>
       <div className="text-light bg-dark p-5">
@@ -175,7 +171,6 @@ const SearchResources = () => {
         onHide={() => setShowModal(false)}
         aria-labelledby="resource-modal"
       >
-        {/* tab container to do either signup or login component */}
         <Modal.Header closeButton>
           <Modal.Title id="resource-modal">Create Resource</Modal.Title>
         </Modal.Header>
