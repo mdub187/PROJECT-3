@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { ChangeEvent, FormEvent } from "react";
-import { Form, Button, Alert } from "react-bootstrap";
+import { Form, Button, Alert, Modal } from "react-bootstrap";
 
 import { useMutation } from "@apollo/client";
 import { LOGIN_MUTATION } from "../utils/mutations";
@@ -8,7 +8,7 @@ import { LOGIN_MUTATION } from "../utils/mutations";
 import Auth from "../utils/Auth";
 import type { User } from "../models/User";
 
-const LoginForm = ({}: { handleModalClose: () => void }) => {
+const LoginForm = ({ handleModalClose }: { handleModalClose: () => void }) => {
   const [loginUser] = useMutation(LOGIN_MUTATION);
 
   const [userFormData, setUserFormData] = useState<User>({
@@ -17,7 +17,7 @@ const LoginForm = ({}: { handleModalClose: () => void }) => {
     password: "",
     savedResource: [],
   });
-  const [validated] = useState(false);
+  const [validated, setValidated] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -32,19 +32,21 @@ const LoginForm = ({}: { handleModalClose: () => void }) => {
     if (form.checkValidity() === false) {
       event.preventDefault();
       event.stopPropagation();
+      setValidated(true);
+      return;
     }
-    
+
     try {
-      console.log(form.checkValidity())
       const response = await loginUser({
         variables: {
           email: userFormData.email,
           password: userFormData.password,
         },
       });
-      console.log(response)
+
       const token = response.data.login.token;
       Auth.login(token);
+      handleModalClose(); // Close the modal after successful login
     } catch (err) {
       console.log(err);
       setShowAlert(true);
@@ -57,7 +59,7 @@ const LoginForm = ({}: { handleModalClose: () => void }) => {
       savedResource: [],
     });
   };
-console.log("loginUser")
+
   return (
     <>
       <Form noValidate validated={validated} onSubmit={handleFormSubmit}>
@@ -110,4 +112,29 @@ console.log("loginUser")
   );
 };
 
-export default LoginForm;
+const SomeComponent = () => {
+  const [showModal, setShowModal] = useState(false);
+
+  const handleModalClose = () => setShowModal(false);
+
+  return (
+    <>
+      <Button onClick={() => setShowModal(true)}>Login</Button>
+      <Modal
+        size="lg"
+        show={showModal}
+        onHide={handleModalClose}
+        aria-labelledby="login-modal"
+      >
+        <Modal.Header closeButton>
+          <Modal.Title id="login-modal">Login</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <LoginForm handleModalClose={handleModalClose} />
+        </Modal.Body>
+      </Modal>
+    </>
+  );
+};
+
+export default SomeComponent;

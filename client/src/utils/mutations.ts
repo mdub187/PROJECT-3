@@ -7,7 +7,7 @@ export const LOGIN_MUTATION = gql`
     }
   }
 `;
-//comment
+
 export const CREATE_USER = gql`
   mutation CreateUser($username: String!, $email: String!, $password: String!) {
     createUser(username: $username, email: $email, password: $password) {
@@ -28,7 +28,7 @@ export const CREATE_USER = gql`
 `;
 
 export const SAVED_RESOURCE = gql`
-  mutation savedResource(
+  mutation saveResource(
     $description: String!
     $resourceId: String!
     $title: String!
@@ -43,7 +43,7 @@ export const SAVED_RESOURCE = gql`
       _id
       username
       email
-      savedResource {
+      savedResources {
         resourceId
         title
         description
@@ -54,8 +54,8 @@ export const SAVED_RESOURCE = gql`
 `;
 
 export const DELETE_RESOURCE = gql`
-  mutation DeleteBook($bookId: String!) {
-    deleteResource(bookId: $bookId) {
+  mutation DeleteResource($resourceId: String!) {
+    deleteResource(resourceId: $resourceId) {
       _id
       username
       email

@@ -11,7 +11,7 @@ const SavedResources = () => {
 
   const { loading, data } = useQuery(GET_SINGLE_USER);
 
-  const userData = data?.getSingleUser || {};
+  const userData = data?.getSingleUser || { savedResources: [] };
 
   const handleDeleteResource = async (resourceId: string) => {
     const token = Auth.loggedIn() ? Auth.getToken() : null;
@@ -59,8 +59,8 @@ const SavedResources = () => {
         <Row>
           {userData?.savedResources?.map((resource: any) => {
             return (
-              <Col md="4">
-                <Card key={resource.resourceId} border="dark">
+              <Col md="4" key={resource.resourceId}>
+                <Card border="dark">
                   <Card.Body>
                     <Card.Title>{resource.title}</Card.Title>
                     <Card.Text>{resource.description}</Card.Text>
