@@ -135,7 +135,7 @@ const resolvers = {
         $or: [{ username: args.username }, { email: args.email }],
       });
       if (!user) {
-        throw new AuthenticationError("Authentication Error");
+        throw new AuthenticationError("No User Found");
       }
 
       const correctPw = await user.isCorrectPassword(args.password);
@@ -239,7 +239,7 @@ const resolvers = {
       try {
         const updatedUser = await User.findByIdAndUpdate(
           { _id: context.user._id },
-          { $addToSet: { savedResource: args.resourceId } },
+          { $addToSet: { savedResources: args.resourceId } },
           { new: true, runValidators: true }
         );
         return updatedUser;
