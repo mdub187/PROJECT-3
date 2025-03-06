@@ -1,11 +1,9 @@
-import { gql } from "graphql-tag";
-
-const typeDefs = gql`
+const typeDefs = `
 type User {
   _id: ID!
   username: String!
   email: String!
-  savedResource: [Resource]
+  savedResources: [Resource]
 }
 
 type Resource {

@@ -6,7 +6,7 @@ const resolvers = {
         getSingleUser: async (_parent, _args, context) => {
             const foundUser = await User.findOne({
                 username: context.user.username,
-            });
+            }).populate("savedResources");
             if (!foundUser) {
                 throw new AuthenticationError("Authentication Error");
             }
@@ -63,7 +63,6 @@ const resolvers = {
             });
             return resources;
         },
-        //getResourceByCategory()
     },
     Mutation: {
         createUser: async (_parent, args, _context) => {
@@ -76,21 +75,6 @@ const resolvers = {
         },
         updateUser: async (_parent, args, context) => {
             if (context.user) {
-                // const updatedUser = await User.findByIdAndUpdate(
-                //   context.user._id,
-                //   {
-                //     $set: {
-                //       //   ...args,
-                //       username: args.username || context.user.username,
-                //       email: args.email || context.user.email,
-                //       password: args.password || context.user.password,
-                //     },
-                //   },
-                //   {
-                //     new: true,
-                //     runValidators: true,
-                //   }
-                // );
                 const targetUser = await User.findById(context.user._id);
                 if (args?.username && targetUser?.username) {
                     targetUser.username = args.username;
@@ -135,13 +119,6 @@ const resolvers = {
                 throw new AuthenticationError("You need to be logged in!");
             }
             try {
-                // const newResource = new Resource({
-                //   title,
-                //   description,
-                //   url,
-                //   category,
-                // });
-                // const savedResource = await newResource.save();
                 const savedResource = await Resource.create({
                     title,
                     description,
@@ -186,21 +163,9 @@ const resolvers = {
                 throw new Error("Error updating resource");
             }
         },
-        // saveResource: async (_parent: any, args: any, context: any) => {
-        //   try {
-        //     const updatedUser = await User.findByIdAndUpdate(
-        //       { _id: context.user._id },
-        //       { $addToSet: { savedResource: args.resourceId } },
-        //       { new: true, runValidators: true }
-        //     );
-        //     return updatedUser;
-        //   } catch (err) {
-        //     return null;
-        //   }
-        // },
         saveResource: async (_parent, args, context) => {
             try {
-                const updatedUser = await User.findByIdAndUpdate({ _id: context.user._id }, { $addToSet: { savedResource: args.resourceId } }, { new: true, runValidators: true });
+                const updatedUser = await User.findByIdAndUpdate({ _id: context.user._id }, { $addToSet: { savedResources: args.resourceId } }, { new: true, runValidators: true });
                 return updatedUser;
             }
             catch (err) {

@@ -33,16 +33,16 @@ const LoginForm = ({}: { handleModalClose: () => void }) => {
       event.preventDefault();
       event.stopPropagation();
     }
-    
+
     try {
-      console.log(form.checkValidity())
+      console.log(form.checkValidity());
       const response = await loginUser({
         variables: {
           email: userFormData.email,
           password: userFormData.password,
         },
       });
-      console.log(response)
+      console.log(response);
       const token = response.data.login.token;
       Auth.login(token);
     } catch (err) {
@@ -57,7 +57,7 @@ const LoginForm = ({}: { handleModalClose: () => void }) => {
       savedResource: [],
     });
   };
-console.log("loginUser")
+  console.log("loginUser");
   return (
     <>
       <Form noValidate validated={validated} onSubmit={handleFormSubmit}>
