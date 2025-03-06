@@ -16,7 +16,7 @@ export const CREATE_USER = gql`
         _id
         username
         email
-        savedResource {
+        savedResources {
           resourceId
           title
           description
@@ -36,7 +36,7 @@ export const SAVED_RESOURCE = gql`
   ) {
     saveResource(
       description: $description
-      resourceId: $bookId
+      resourceId: $resourceId
       title: $title
       url: $url
     ) {
