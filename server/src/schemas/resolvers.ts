@@ -8,7 +8,7 @@ const resolvers = {
     getSingleUser: async (_parent: any, _args: any, context: any) => {
       const foundUser = await User.findOne({
         username: context.user.username,
-      });
+      }).populate("savedResources");
       if (!foundUser) {
         throw new AuthenticationError("Authentication Error");
       }

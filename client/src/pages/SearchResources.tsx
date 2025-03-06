@@ -159,7 +159,7 @@ const SearchResources = () => {
                         (savedResourceId: string) =>
                           savedResourceId === resource.resourceId
                       )
-                        ? "This resource has already been saved!"
+                        ? "Resource Saved!"
                         : "Save this Resource!"}
                     </Button>
                   )}
