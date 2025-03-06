@@ -11,8 +11,6 @@ export const SEARCH_RESOURCES = gql`
   }
 `;
 
-
-
 export const GET_SINGLE_USER = gql`
   query GetMe {
     getSingleUser {
