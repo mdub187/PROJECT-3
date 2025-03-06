@@ -59,7 +59,7 @@ export const DELETE_RESOURCE = gql`
       _id
       username
       email
-      saveResource {
+      savedResources {
         resourceId
         title
         description
