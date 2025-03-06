@@ -4,7 +4,7 @@ import { DELETE_RESOURCE } from "../utils/mutations";
 import { useQuery } from "@apollo/client";
 import { GET_SINGLE_USER } from "../utils/queries";
 import Auth from "../utils/Auth";
-import { removeResourceId } from "../utils/localStorage";
+import { removeResourceId, getSavedResourceIds } from "../utils/localStorage";
 
 const SavedResources = () => {
   const [deleteResource] = useMutation(DELETE_RESOURCE);
@@ -37,6 +37,9 @@ const SavedResources = () => {
     return <h2>LOADING...</h2>;
   }
 
+  // Retrieve saved resource IDs from local storage
+  const savedResourceIds = getSavedResourceIds();
+
   return (
     <>
       <div className="text-light bg-dark p-5">
@@ -58,6 +61,10 @@ const SavedResources = () => {
         </h2>
         <Row>
           {userData?.savedResources?.map((resource: any) => {
+            // Check if the resource ID is in the savedResourceIds array
+            if (!savedResourceIds.includes(resource.resourceId)) {
+              return null;
+            }
             return (
               <Col md="4" key={resource.resourceId}>
                 <Card border="dark">
