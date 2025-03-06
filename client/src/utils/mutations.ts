@@ -28,7 +28,7 @@ export const CREATE_USER = gql`
 `;
 
 export const SAVED_RESOURCE = gql`
-  mutation savedRESOURCE(
+  mutation savedResource(
     $description: String!
     $resourceId: String!
     $title: String!
@@ -43,7 +43,7 @@ export const SAVED_RESOURCE = gql`
       _id
       username
       email
-      savedResources {
+      savedResource {
         resourceId
         title
         description

@@ -45,6 +45,7 @@ const CreateResourceForm = ({}: { handleModalClose: () => void }) => {
           url: userFormData.url,
         },
       });
+      console.log(response);
 
       console.log("resource has been added");
     } catch (err) {

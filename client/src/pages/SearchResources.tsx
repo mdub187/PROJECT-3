@@ -75,10 +75,18 @@ const SearchResources = () => {
           url: resourceToSave.url,
         },
       });
-      setSavedResourceIds((prevIds: any) => [
-        ...prevIds,
+      // setSavedResourceIds((prevIds: any) => [
+      //   ...prevIds,
+      //   resourceToSave.resourceId,
+      // ]);
+      const updatedSavedResourceIds = [
+        ...savedResourceIds,
         resourceToSave.resourceId,
-      ]);
+      ];
+      setSavedResourceIds(updatedSavedResourceIds);
+
+      // Save the updated array to localStorage
+      saveResourceIds(updatedSavedResourceIds);
     } catch (err) {
       console.error("Error saving resource:", err);
     }
